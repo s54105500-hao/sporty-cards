@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sporty Player Cards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05070e;--surface:#090c17;--card:#0c1020;--elevated:#10152a;
+  --border:rgba(255,255,255,0.055);--border-md:rgba(255,255,255,0.1);
+  --txt:#dde5f8;--txt2:#5a6a88;--txt3:#2e3a52;
+  --blue:#00c8f8;--blue-d:rgba(0,200,248,0.1);--blue-g:rgba(0,200,248,0.25);
+  --gold:#f0b429;--gold-d:rgba(240,180,41,0.1);--gold-g:rgba(240,180,41,0.3);
+  --silver:#94a3c4;--silver-d:rgba(148,163,196,0.1);--silver-g:rgba(148,163,196,0.25);
+  --green:#10d48e;--green-d:rgba(16,212,142,0.1);
+  --red:#ff4757;--red-d:rgba(255,71,87,0.1);
+  --elite:#c084fc;--elite-d:rgba(192,132,252,0.1);--elite-g:rgba(192,132,252,0.3);
+  --fn-d:'Bebas Neue',sans-serif;--fn-b:'Rajdhani',sans-serif;--fn-m:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--fn-b);background:var(--bg);color:var(--txt);overflow-x:hidden;min-height:100vh}
+body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.032'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--txt3);border-radius:2px}
+
+/* ── NAV ── */
+#nav{position:fixed;top:0;left:0;right:0;z-index:600;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(5,7,14,0.88);backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--fn-d);font-size:1.3rem;letter-spacing:.06em;color:var(--txt)}
+.nav-logo em{color:var(--blue);font-style:normal}
+.nav-tabs{display:flex;gap:2px}
+.nav-tab{font-family:var(--fn-b);font-weight:600;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--txt2);background:none;border:none;padding:8px 14px;border-radius:4px;cursor:pointer;transition:all .2s}
+.nav-tab:hover,.nav-tab.on{color:var(--blue);background:var(--blue-d)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-bal{font-family:var(--fn-m);font-size:.75rem;color:var(--gold);background:var(--gold-d);border:1px solid rgba(240,180,41,.2);padding:5px 12px;border-radius:4px}
+.nav-cbtn{font-family:var(--fn-b);font-weight:700;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;background:var(--elevated);border:1px solid var(--border);color:var(--txt);padding:6px 14px;border-radius:4px;cursor:pointer;transition:all .2s;position:relative}
+.nav-cbtn:hover{border-color:var(--blue-g);color:var(--blue)}
+.nav-cnt{position:absolute;top:-5px;right:-5px;width:16px;height:16px;background:var(--blue);color:#000;font-size:.58rem;font-weight:700;border-radius:50%;display:none;align-items:center;justify-content:center}
+
+/* ── PAGES ── */
+.pg{display:none;padding-top:58px;min-height:100vh}
+.pg.on{display:block}
+
+/* ── TICKER ── */
+#ticker{height:36px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;overflow:hidden;flex-shrink:0}
+.tk-label{font-family:var(--fn-m);font-size:.6rem;letter-spacing:.18em;color:var(--red);text-transform:uppercase;padding:0 18px;border-right:1px solid var(--border);white-space:nowrap;height:100%;display:flex;align-items:center;gap:7px;flex-shrink:0}
+.tk-dot{width:5px;height:5px;background:var(--red);border-radius:50%;animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
+.tk-track{display:flex;animation:tkScroll 50s linear infinite;white-space:nowrap}
+@keyframes tkScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.tk-item{font-family:var(--fn-b);font-size:.8rem;font-weight:500;color:var(--txt2);padding:0 36px;border-right:1px solid var(--border);height:36px;display:flex;align-items:center}
+.tk-u{color:var(--txt);font-weight:700}.tk-w{color:var(--green);font-weight:700}.tk-j{color:var(--gold);font-weight:700}.tk-l{color:var(--txt2)}
+
+/* ── HERO ── */
+.hero{position:relative;min-height:86vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 24px 60px;overflow:hidden}
+.hero-mesh{position:absolute;inset:0;background:radial-gradient(ellipse 55% 50% at 50% 60%,rgba(0,100,180,.13) 0%,transparent 65%),radial-gradient(ellipse 30% 25% at 10% 15%,rgba(0,200,248,.07) 0%,transparent 55%),radial-gradient(ellipse 22% 32% at 88% 78%,rgba(240,180,41,.05) 0%,transparent 55%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,200,248,.032) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,248,.032) 1px,transparent 1px);background-size:50px 50px;mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 20%,transparent 75%);pointer-events:none}
+.h-ey{font-family:var(--fn-m);font-size:.65rem;letter-spacing:.3em;color:var(--blue);text-transform:uppercase;margin-bottom:24px;opacity:0;animation:aup .7s .1s ease forwards}
+.h-h1{font-family:var(--fn-d);font-size:clamp(3.8rem,8.5vw,8rem);line-height:.9;letter-spacing:.01em;text-transform:uppercase;margin-bottom:24px;opacity:0;animation:aup .7s .25s ease forwards}
+.h-h1 .bl{color:var(--blue)}.h-h1 .str{-webkit-text-stroke:2px rgba(221,229,248,.18);color:transparent}
+.h-sub{font-size:1rem;font-weight:400;color:var(--txt2);max-width:440px;line-height:1.65;margin-bottom:44px;opacity:0;animation:aup .7s .4s ease forwards}
+.h-acts{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;opacity:0;animation:aup .7s .55s ease forwards}
+@keyframes aup{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── BUTTONS ── */
+.btn{font-family:var(--fn-b);font-weight:700;font-size:.88rem;letter-spacing:.1em;text-transform:uppercase;border:none;border-radius:5px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:7px;padding:12px 26px}
+.btn-blue{background:var(--blue);color:#000;box-shadow:0 5px 22px rgba(0,200,248,.22)}
+.btn-blue:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(0,200,248,.38)}
+.btn-ghost{background:transparent;color:var(--txt);border:1px solid var(--border-md)}
+.btn-ghost:hover{border-color:var(--blue-g);color:var(--blue);background:var(--blue-d)}
+.btn-green{background:var(--green);color:#000;box-shadow:0 5px 20px rgba(16,212,142,.2)}
+.btn-green:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(16,212,142,.36)}
+
+/* ── SECTION ── */
+.section{padding:64px 24px;max-width:1160px;margin:0 auto}
+.sec-ey{font-family:var(--fn-m);font-size:.63rem;letter-spacing:.28em;color:var(--blue);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.sec-ey::before{content:'';width:18px;height:1px;background:var(--blue)}
+.sec-h2{font-family:var(--fn-d);font-size:clamp(1.9rem,3.8vw,3rem);letter-spacing:.02em;text-transform:uppercase;line-height:1;margin-bottom:36px}
+
+/* ══════════════════════════════════════════════
+   PACK CARDS (store)
+══════════════════════════════════════════════ */
+.packs-store{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px}
+
+.pk{border-radius:14px;padding:28px 24px;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column}
+.pk:hover{transform:translateY(-5px)}
+
+/* STARTER */
+.pk-s{background:linear-gradient(148deg,#0d1220 0%,#0a0f1c 60%,#0c1118 100%);border:1px solid rgba(148,163,196,.22);box-shadow:0 4px 30px rgba(0,0,0,.4)}
+.pk-s:hover{box-shadow:0 12px 50px rgba(148,163,196,.1),0 4px 30px rgba(0,0,0,.5)}
+/* PRO */
+.pk-p{background:linear-gradient(148deg,#06101f 0%,#081428 60%,#060e1c 100%);border:1px solid rgba(0,200,248,.25);box-shadow:0 4px 30px rgba(0,0,0,.4)}
+.pk-p:hover{box-shadow:0 12px 50px rgba(0,200,248,.14),0 4px 30px rgba(0,0,0,.5)}
+/* ELITE */
+.pk-e{background:linear-gradient(148deg,#120e04 0%,#1a1006 60%,#110c04 100%);border:1px solid rgba(240,180,41,.3);box-shadow:0 4px 30px rgba(0,0,0,.4)}
+.pk-e:hover{box-shadow:0 12px 50px rgba(240,180,41,.16),0 4px 30px rgba(0,0,0,.5)}
+
+.pk::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.pk-s::before{background:linear-gradient(90deg,transparent,var(--silver),transparent)}
+.pk-p::before{background:linear-gradient(90deg,transparent,var(--blue),transparent)}
+.pk-e::before{background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+
+.pk-tier{font-family:var(--fn-m);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;padding:3px 9px;border-radius:3px;display:inline-block;margin-bottom:18px}
+.t-s{background:var(--silver-d);color:var(--silver);border:1px solid var(--silver-g)}
+.t-p{background:var(--blue-d);color:var(--blue);border:1px solid var(--blue-g)}
+.t-e{background:var(--gold-d);color:var(--gold);border:1px solid var(--gold-g)}
+
+.pk-name{font-family:var(--fn-d);font-size:1.9rem;letter-spacing:.04em;margin-bottom:4px}
+.pk-price{font-family:var(--fn-m);font-size:1.4rem;font-weight:600;margin-bottom:22px}
+.pk-price-s{color:var(--silver)}.pk-price-p{color:var(--blue)}.pk-price-e{color:var(--gold)}
+.pk-stock{display:inline-flex;align-items:center;align-self:flex-start;font-family:var(--fn-m);font-size:.64rem;letter-spacing:.14em;color:var(--txt);text-transform:uppercase;margin:-2px 0 18px;padding:7px 12px 6px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--border-md);box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
+.pk-s .pk-stock{color:var(--silver);background:rgba(148,163,196,.08);border-color:rgba(148,163,196,.18)}
+.pk-p .pk-stock{color:var(--blue);background:rgba(0,200,248,.08);border-color:rgba(0,200,248,.2)}
+.pk-e .pk-stock{color:var(--gold);background:rgba(240,180,41,.08);border-color:rgba(240,180,41,.22)}
+.pk-art{display:flex;align-items:center;justify-content:center;height:240px;margin:-4px 0 18px}
+.pk-art img{width:100%;max-width:220px;max-height:240px;object-fit:contain;filter:drop-shadow(0 16px 28px rgba(0,0,0,.32))}
+
+.pk-stats-row{display:flex;gap:1px;background:rgba(255,255,255,.04);border-radius:6px;overflow:hidden;margin-bottom:20px}
+.pk-stat{flex:1;background:rgba(0,0,0,.35);padding:12px 10px;text-align:center}
+.pk-stat-v{font-family:var(--fn-d);font-size:1.1rem;line-height:1;margin-bottom:3px}
+.pk-stat-l{font-family:var(--fn-m);font-size:.52rem;letter-spacing:.1em;color:var(--txt3);text-transform:uppercase}
+
+.pk-topjp{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:6px;margin-bottom:20px}
+.pk-s .pk-topjp{background:rgba(148,163,196,.06);border:1px solid rgba(148,163,196,.12)}
+.pk-p .pk-topjp{background:rgba(0,200,248,.06);border:1px solid rgba(0,200,248,.12)}
+.pk-e .pk-topjp{background:rgba(240,180,41,.06);border:1px solid rgba(240,180,41,.14)}
+.pkjp-label{font-family:var(--fn-m);font-size:.6rem;letter-spacing:.12em;color:var(--txt3);text-transform:uppercase}
+.pkjp-val{font-family:var(--fn-d);font-size:1.3rem}
+.pkjp-val-s{color:var(--silver)}.pkjp-val-p{color:var(--blue)}.pkjp-val-e{color:var(--gold)}
+
+.pk-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:auto;padding-top:20px}
+.pk-btn-view{font-family:var(--fn-b);font-weight:700;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;padding:11px;border-radius:5px;cursor:pointer;transition:all .2s;background:transparent;border:1px solid var(--border-md);color:var(--txt2)}
+.pk-btn-view:hover{color:var(--txt);border-color:var(--border-md)}
+.pk-btn-open{font-family:var(--fn-b);font-weight:700;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;padding:11px;border-radius:5px;cursor:pointer;transition:all .2s;border:none}
+.pk-btn-open-s{background:rgba(148,163,196,.14);color:var(--silver);border:1px solid rgba(148,163,196,.22)}
+.pk-btn-open-s:hover{background:rgba(148,163,196,.24)}
+.pk-btn-open-p{background:var(--blue-d);color:var(--blue);border:1px solid var(--blue-g)}
+.pk-btn-open-p:hover{background:rgba(0,200,248,.18);box-shadow:0 4px 18px rgba(0,200,248,.2)}
+.pk-btn-open-e{background:var(--gold-d);color:var(--gold);border:1px solid var(--gold-g)}
+.pk-btn-open-e:hover{background:rgba(240,180,41,.2);box-shadow:0 4px 18px rgba(240,180,41,.2)}
+.pk-btn-open:disabled{opacity:.3;cursor:not-allowed}
+
+/* ══════════════════════════════════════════════
+   PACK DETAIL MODAL
+══════════════════════════════════════════════ */
+#detail-modal{display:none;position:fixed;inset:0;z-index:700;background:rgba(5,7,14,.97);backdrop-filter:blur(24px);overflow-y:auto}
+#detail-modal.on{display:block}
+
+.dm-inner{max-width:1020px;margin:0 auto;padding:28px 24px 60px}
+.dm-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.dm-back{font-family:var(--fn-m);font-size:.68rem;letter-spacing:.15em;color:var(--txt2);background:none;border:1px solid var(--border);padding:7px 16px;border-radius:4px;cursor:pointer;text-transform:uppercase;transition:all .2s}
+.dm-back:hover{color:var(--txt);border-color:var(--border-md)}
+.dm-open-btn{font-family:var(--fn-b);font-weight:700;font-size:.9rem;letter-spacing:.1em;text-transform:uppercase;padding:11px 28px;border-radius:5px;cursor:pointer;border:none;transition:all .2s}
+.dm-open-btn-s{background:rgba(148,163,196,.15);color:var(--silver);border:1px solid rgba(148,163,196,.25)}
+.dm-open-btn-s:hover{background:rgba(148,163,196,.25)}
+.dm-open-btn-p{background:var(--blue-d);color:var(--blue);border:1px solid var(--blue-g)}
+.dm-open-btn-p:hover{background:rgba(0,200,248,.18);box-shadow:0 6px 24px rgba(0,200,248,.25)}
+.dm-open-btn-e{background:var(--gold-d);color:var(--gold);border:1px solid var(--gold-g)}
+.dm-open-btn-e:hover{background:rgba(240,180,41,.2);box-shadow:0 6px 24px rgba(240,180,41,.25)}
+
+.dm-hero{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:start;margin-bottom:44px}
+.dm-pack-vis{width:160px;height:222px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;position:relative;overflow:hidden;flex-shrink:0}
+.dmpv-s{background:linear-gradient(148deg,#0d1220,#0a0f1c);border:1px solid rgba(148,163,196,.3);box-shadow:0 0 40px rgba(148,163,196,.08)}
+.dmpv-p{background:linear-gradient(148deg,#06101f,#081428);border:1px solid rgba(0,200,248,.35);box-shadow:0 0 40px rgba(0,200,248,.12)}
+.dmpv-e{background:linear-gradient(148deg,#120e04,#1a1006);border:1px solid rgba(240,180,41,.4);box-shadow:0 0 50px rgba(240,180,41,.18)}
+.dmpv-shine{position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.05) 50%,transparent 60%);animation:shine 3.5s linear infinite}
+@keyframes shine{0%{transform:translateX(-200%) rotate(10deg)}100%{transform:translateX(200%) rotate(10deg)}}
+.dm-pack-img{position:relative;z-index:1;width:100%;height:100%;object-fit:contain;padding:6px 2px 0;filter:drop-shadow(0 14px 28px rgba(0,0,0,.3))}
+
+.dm-info{display:flex;flex-direction:column;gap:16px;padding-top:4px}
+.dm-pack-title{font-family:var(--fn-d);font-size:3rem;letter-spacing:.02em;line-height:.95}
+.dm-pack-stock{display:inline-flex;align-items:center;align-self:flex-start;font-family:var(--fn-m);font-size:.66rem;letter-spacing:.16em;color:var(--txt);text-transform:uppercase;padding:7px 12px 6px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--border-md)}
+.dm-pack-sub{font-size:.9rem;color:var(--txt2);line-height:1.6;max-width:480px}
+.dm-3stats{display:flex;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.dm-stat{flex:1;background:var(--card);padding:16px 14px;text-align:center}
+.dm-stat-v{font-family:var(--fn-d);font-size:1.8rem;line-height:1;margin-bottom:4px}
+.dm-stat-l{font-family:var(--fn-m);font-size:.55rem;letter-spacing:.12em;color:var(--txt3);text-transform:uppercase}
+.dm-notice{font-family:var(--fn-m);font-size:.62rem;letter-spacing:.1em;color:var(--txt3);padding:9px 14px;background:var(--card);border:1px solid var(--border);border-radius:5px}
+
+/* ── DETAIL GRID ── */
+.dm-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.dm-full{margin-bottom:20px}
+
+.dm-box{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.dm-box-hd{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.dm-box-hd-label{font-family:var(--fn-m);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--txt2)}
+.dm-box-body{padding:20px}
+
+/* distribution table */
+.dist-table{width:100%;border-collapse:collapse}
+.dist-table th{font-family:var(--fn-m);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);text-align:left;padding:0 0 10px 0;font-weight:400}
+.dist-table th:last-child{text-align:right}
+.dist-row{border-top:1px solid var(--border)}
+.dist-row td{padding:10px 0;font-size:.87rem;font-weight:500;vertical-align:middle}
+.dist-row td:last-child{text-align:right}
+.dist-pct-bar{display:flex;align-items:center;gap:8px}
+.dist-bar-track{flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.dist-bar-fill{height:100%;border-radius:2px;transition:width .6s ease}
+.dist-pct-num{font-family:var(--fn-m);font-size:.7rem;color:var(--txt2);min-width:32px;text-align:right}
+.dist-range{font-size:.85rem;font-weight:600}
+
+/* pie chart */
+.pie-wrap{display:flex;flex-direction:column;align-items:center;gap:20px}
+.pie-svg-wrap{position:relative;width:140px;height:140px;flex-shrink:0}
+.pie-legend{display:flex;flex-direction:column;gap:10px;width:100%}
+.pie-leg-item{display:flex;align-items:center;gap:10px;font-size:.82rem;font-weight:500}
+.pie-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.pie-pct{margin-left:auto;font-family:var(--fn-m);font-size:.72rem;color:var(--txt2)}
+
+/* reward tiers */
+.rt-section{margin-bottom:16px}
+.rt-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.rt-label{font-family:var(--fn-m);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;padding:3px 9px;border-radius:3px}
+.rt-small-l{background:rgba(148,163,196,.08);color:var(--silver);border:1px solid rgba(148,163,196,.15)}
+.rt-mid-l{background:var(--blue-d);color:var(--blue);border:1px solid var(--blue-g)}
+.rt-big-l{background:var(--gold-d);color:var(--gold);border:1px solid var(--gold-g)}
+.rt-count{font-family:var(--fn-m);font-size:.58rem;letter-spacing:.12em;color:var(--txt3);text-transform:uppercase;white-space:nowrap}
+.rt-cards-row{display:flex;gap:10px;flex-wrap:nowrap;overflow-x:auto;padding:2px 2px 10px;scrollbar-width:thin;scroll-snap-type:x proximity}
+.rt-cards-row::-webkit-scrollbar{height:4px}
+.rt-cards-row::-webkit-scrollbar-thumb{background:var(--txt3);border-radius:999px}
+.rt-mini-card{background:var(--elevated);border:1px solid var(--border);border-radius:8px;padding:12px 14px;min-width:220px;flex:0 0 220px;cursor:pointer;transition:all .2s;scroll-snap-align:start;position:relative;overflow:hidden}
+.rt-mini-card:hover{border-color:var(--border-md);transform:translateY(-2px)}
+.rt-mini-art{height:260px;border-radius:6px;overflow:hidden;margin:-2px -4px 10px;position:relative;background:linear-gradient(180deg,#0c1424,#09101d);display:flex;align-items:center;justify-content:center}
+.rt-mini-art img{width:100%;height:100%;object-fit:contain;display:block}
+.rt-mini-art::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(5,7,14,.55),rgba(5,7,14,.05))}
+.rtmc-code{font-family:var(--fn-m);font-size:.54rem;letter-spacing:.12em;color:var(--txt3);margin-bottom:6px;text-transform:uppercase}
+.rtmc-name{font-family:var(--fn-d);font-size:.95rem;letter-spacing:.03em;margin-bottom:3px}
+.rtmc-val{font-family:var(--fn-d);font-size:1.4rem;line-height:1;margin-bottom:4px}
+.rtmc-pos{font-family:var(--fn-m);font-size:.55rem;letter-spacing:.08em;color:var(--txt3);margin-bottom:8px}
+.rtmc-cond{font-size:.72rem;color:var(--txt2);line-height:1.4}
+.rtmc-upside{font-family:var(--fn-b);font-weight:700;font-size:.75rem;color:var(--green);margin-top:5px}
+
+/* JACKPOT CARD */
+.jp-card{background:linear-gradient(145deg,#1a1406 0%,#120e04 50%,#1c1608 100%);border:1px solid rgba(240,180,41,.45);border-radius:14px;padding:28px;position:relative;overflow:hidden;display:flex;align-items:center;gap:32px}
+.jp-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(240,180,41,.07) 0%,transparent 60%)}
+.jp-card-s{background:linear-gradient(145deg,#111828 0%,#0c1220 50%,#141e30 100%);border:1px solid rgba(148,163,196,.35)}
+.jp-card-s::before{background:linear-gradient(135deg,rgba(148,163,196,.06) 0%,transparent 60%)}
+.jp-card-p{background:linear-gradient(145deg,#060f1e 0%,#081428 50%,#060e1c 100%);border:1px solid rgba(0,200,248,.35)}
+.jp-card-p::before{background:linear-gradient(135deg,rgba(0,200,248,.06) 0%,transparent 60%)}
+.jp-glow{position:absolute;inset:0;border-radius:14px;animation:jpGlow 2.5s ease-in-out infinite;pointer-events:none}
+.jp-glow-e{box-shadow:inset 0 0 40px rgba(240,180,41,.08),0 0 60px rgba(240,180,41,.12)}
+.jp-glow-s{box-shadow:inset 0 0 30px rgba(148,163,196,.05),0 0 40px rgba(148,163,196,.06)}
+.jp-glow-p{box-shadow:inset 0 0 30px rgba(0,200,248,.06),0 0 40px rgba(0,200,248,.08)}
+@keyframes jpGlow{0%,100%{opacity:.6}50%{opacity:1}}
+.jp-badge{position:absolute;top:14px;right:14px;font-family:var(--fn-m);font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;padding:4px 9px;border-radius:3px}
+.jp-badge-e{background:var(--gold-d);color:var(--gold);border:1px solid var(--gold-g)}
+.jp-badge-s{background:var(--silver-d);color:var(--silver);border:1px solid var(--silver-g)}
+.jp-badge-p{background:var(--blue-d);color:var(--blue);border:1px solid var(--blue-g)}
+.jp-art{width:170px;height:240px;flex-shrink:0;border-radius:12px;overflow:hidden;position:relative;background:#0a1120;border:1px solid rgba(255,255,255,.08);box-shadow:0 16px 34px rgba(0,0,0,.35);z-index:1}
+.jp-art img{width:100%;height:100%;object-fit:cover;display:block}
+.jp-art::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(5,7,14,.48),rgba(5,7,14,.04))}
+.jp-left{flex:1}
+.jp-top-label{font-family:var(--fn-m);font-size:.6rem;letter-spacing:.2em;color:var(--txt3);text-transform:uppercase;margin-bottom:6px}
+.jp-player{font-family:var(--fn-d);font-size:2rem;letter-spacing:.03em;line-height:1;margin-bottom:4px}
+.jp-pos{font-family:var(--fn-m);font-size:.6rem;letter-spacing:.1em;color:var(--txt3);margin-bottom:16px}
+.jp-cond-l{font-family:var(--fn-m);font-size:.58rem;letter-spacing:.1em;color:var(--txt3);text-transform:uppercase;margin-bottom:4px}
+.jp-cond{font-size:.85rem;color:var(--txt2);line-height:1.5;margin-bottom:12px}
+.jp-upside{font-family:var(--fn-b);font-weight:700;font-size:.85rem;color:var(--green)}
+.jp-right{text-align:right;flex-shrink:0}
+.jp-val-l{font-family:var(--fn-m);font-size:.58rem;letter-spacing:.12em;color:var(--txt3);text-transform:uppercase;margin-bottom:6px}
+.jp-val{font-family:var(--fn-d);font-size:3.5rem;line-height:1}
+.jp-val-e{color:var(--gold)}.jp-val-s{color:var(--silver)}.jp-val-p{color:var(--blue)}
+.jp-val-unit{font-family:var(--fn-m);font-size:.65rem;letter-spacing:.12em;color:var(--txt3);margin-top:4px}
+.jp-prob{font-family:var(--fn-m);font-size:.68rem;color:var(--txt3);margin-top:8px}
+
+/* ══════════════════════════════════════════════
+   OPENING MODAL
+══════════════════════════════════════════════ */
+#open-modal{display:none;position:fixed;inset:0;z-index:800;background:rgba(5,7,14,.97);backdrop-filter:blur(22px);flex-direction:column;align-items:center;justify-content:center}
+#open-modal.on{display:flex}
+.om-close{position:absolute;top:18px;right:22px;font-family:var(--fn-m);font-size:.66rem;letter-spacing:.15em;color:var(--txt2);background:none;border:1px solid var(--border);padding:7px 14px;border-radius:4px;cursor:pointer;text-transform:uppercase;transition:all .2s}
+.om-close:hover{color:var(--txt);border-color:var(--border-md)}
+.om-inner{width:100%;max-width:860px;padding:20px;display:flex;flex-direction:column;align-items:center}
+
+/* pack animation */
+.om-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:400px;width:100%;position:relative}
+.pa-wrap{width:170px;height:236px;position:relative;cursor:pointer}
+.pa-body{width:100%;height:100%;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;position:relative;overflow:hidden;transition:transform .2s}
+.pa-s{background:linear-gradient(148deg,#0d1220,#0a0f1c);border:1px solid rgba(148,163,196,.3)}
+.pa-p{background:linear-gradient(148deg,#06101f,#081428);border:1px solid rgba(0,200,248,.35)}
+.pa-e{background:linear-gradient(148deg,#120e04,#1a1006);border:1px solid rgba(240,180,41,.4)}
+.pa-shine{position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.055) 50%,transparent 60%);animation:shine 3.5s linear infinite}
+.pa-pack-img{position:relative;z-index:1;width:100%;height:100%;object-fit:contain;padding:6px 2px 0;filter:drop-shadow(0 16px 32px rgba(0,0,0,.36))}
+.om-hint{font-family:var(--fn-m);font-size:.66rem;letter-spacing:.2em;color:var(--txt3);text-transform:uppercase;margin-top:22px;animation:hpulse 2s ease-in-out infinite}
+@keyframes hpulse{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes pkShake{0%,100%{transform:translateX(0) rotate(0)}15%{transform:translateX(-7px) rotate(-2.5deg)}30%{transform:translateX(7px) rotate(2.5deg)}45%{transform:translateX(-5px) rotate(-1.5deg)}60%{transform:translateX(5px) rotate(1.5deg)}75%{transform:translateX(-3px) rotate(-.8deg)}90%{transform:translateX(3px) rotate(.8deg)}}
+@keyframes pkGlowS{0%,100%{box-shadow:0 0 20px rgba(148,163,196,.08)}50%{box-shadow:0 0 80px rgba(148,163,196,.55),0 0 140px rgba(148,163,196,.25)}}
+@keyframes pkGlowP{0%,100%{box-shadow:0 0 20px rgba(0,200,248,.1)}50%{box-shadow:0 0 80px rgba(0,200,248,.6),0 0 140px rgba(0,200,248,.28)}}
+@keyframes pkGlowE{0%,100%{box-shadow:0 0 20px rgba(240,180,41,.1)}50%{box-shadow:0 0 80px rgba(240,180,41,.65),0 0 160px rgba(240,180,41,.3)}}
+.pa-body.shaking{animation:pkShake .4s ease-in-out 3}
+.pa-body.glow-s{animation:pkGlowS .9s ease-in-out}
+.pa-body.glow-p{animation:pkGlowP .9s ease-in-out}
+.pa-body.glow-e{animation:pkGlowE .9s ease-in-out}
+
+/* reveal layout */
+.om-reveal{display:none;width:100%;max-width:800px;gap:36px;align-items:flex-start;padding:12px 0}
+.om-reveal.on{display:flex;animation:ascale .5s ease forwards}
+@keyframes ascale{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+
+/* player card */
+.plcard{width:230px;min-width:230px;height:326px;border-radius:14px;position:relative;overflow:hidden;flex-shrink:0;animation:cfloat 3s ease-in-out infinite}
+@keyframes cfloat{0%,100%{transform:translateY(0) rotate(.2deg)}50%{transform:translateY(-7px) rotate(-.2deg)}}
+.plcard-holo{position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.04) 50%,transparent 60%);animation:shine 3s linear infinite;pointer-events:none;z-index:3}
+.plcard-s{background:linear-gradient(150deg,#111929 0%,#0c1420 50%,#151e30 100%);border:1px solid rgba(148,163,196,.4);box-shadow:0 24px 80px rgba(0,0,0,.65),0 0 40px rgba(148,163,196,.07)}
+.plcard-g{background:linear-gradient(150deg,#1a140a 0%,#120e06 50%,#1c1608 100%);border:1px solid rgba(240,180,41,.5);box-shadow:0 24px 80px rgba(0,0,0,.65),0 0 50px rgba(240,180,41,.17)}
+.plcard-el{background:linear-gradient(150deg,#130b1e 0%,#0c0618 50%,#16093a 100%);border:1px solid rgba(192,132,252,.5);box-shadow:0 24px 80px rgba(0,0,0,.65),0 0 50px rgba(192,132,252,.17)}
+.plcard-art{position:absolute;inset:0}
+.plcard-art img{width:100%;height:100%;object-fit:cover;display:block}
+.plcard-art::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(5,7,14,.18) 0%,rgba(5,7,14,.06) 30%,rgba(5,7,14,.08) 52%,rgba(5,7,14,.72) 100%)}
+.plcard-val{display:none}
+.plcard-num{font-family:var(--fn-d);font-size:3.6rem;line-height:1;display:block;animation:cfloat 3s ease-in-out infinite;text-shadow:0 2px 0 rgba(0,0,0,.28),0 8px 22px rgba(0,0,0,.45)}
+.plcard-unit{font-family:var(--fn-m);font-size:.6rem;letter-spacing:.16em;color:rgba(248,250,255,.92);text-transform:uppercase;text-shadow:0 2px 10px rgba(0,0,0,.35)}
+.plcard-foot{position:absolute;bottom:0;left:0;right:0;padding:13px 14px 14px;background:linear-gradient(to top,rgba(0,0,0,.88) 0%,transparent 100%);z-index:4}
+.plcard-cl{font-family:var(--fn-m);font-size:.5rem;letter-spacing:.1em;color:var(--txt3);text-transform:uppercase;margin-bottom:4px}
+.plcard-ct{font-size:.7rem;color:var(--txt);line-height:1.35}
+.plcard-up{font-family:var(--fn-b);font-weight:700;font-size:.72rem;color:var(--green);margin-top:8px}
+
+/* reveal panel */
+.rp{flex:1;display:flex;flex-direction:column;gap:0}
+.rp-ey{font-family:var(--fn-m);font-size:.6rem;letter-spacing:.25em;color:var(--txt3);text-transform:uppercase;margin-bottom:5px}
+.rp-player{font-family:var(--fn-d);font-size:2.6rem;letter-spacing:.02em;text-transform:uppercase;line-height:.95;margin-bottom:24px}
+.rp-vb{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px 20px;margin-bottom:12px;position:relative;overflow:hidden}
+.rp-vb::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:2px}
+.rp-vb-blue::before{background:var(--blue)}.rp-vb-green::before{background:var(--green)}
+.rp-vl{font-family:var(--fn-m);font-size:.6rem;letter-spacing:.14em;color:var(--txt3);text-transform:uppercase;margin-bottom:5px}
+.rp-vn{font-family:var(--fn-d);font-size:2.2rem;line-height:1}
+.rp-vn-b{color:var(--blue)}.rp-vn-g{color:var(--green)}
+.rp-vs2{font-size:.78rem;color:var(--txt2);margin-top:4px;line-height:1.5}
+.rp-cond-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:22px}
+.rp-cl{font-family:var(--fn-m);font-size:.58rem;letter-spacing:.14em;color:var(--txt3);text-transform:uppercase;margin-bottom:5px}
+.rp-ct{font-size:.9rem;font-weight:500;color:var(--txt);line-height:1.5}
+
+/* DECISION */
+.dz{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dz-sell{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px;text-align:center;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:5px}
+.dz-sell:hover{border-color:rgba(148,163,196,.2);background:rgba(148,163,196,.04)}
+.dz-hold{background:var(--green-d);border:1px solid rgba(16,212,142,.28);border-radius:8px;padding:18px;text-align:center;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:5px;box-shadow:0 4px 20px rgba(16,212,142,.08)}
+.dz-hold:hover{background:rgba(16,212,142,.12);box-shadow:0 8px 36px rgba(16,212,142,.18);transform:translateY(-2px)}
+.dz-l{font-family:var(--fn-d);font-size:1.2rem;letter-spacing:.04em}
+.dz-sell .dz-l{color:var(--txt2)}.dz-hold .dz-l{color:var(--green)}
+.dz-v{font-family:var(--fn-d);font-size:1.7rem;line-height:1}
+.dz-sell .dz-v{color:var(--txt)}.dz-hold .dz-v{color:var(--green)}
+.dz-s{font-family:var(--fn-m);font-size:.6rem;letter-spacing:.1em;color:var(--txt3);text-transform:uppercase}
+.dz-r{font-size:.7rem;font-weight:500}
+.dz-sell .dz-r{color:var(--txt3)}.dz-hold .dz-r{color:rgba(16,212,142,.6)}
+
+/* ══ MY CARDS ══ */
+.cards-hd{padding:40px 28px 20px;border-bottom:1px solid var(--border);max-width:1160px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.cards-badge{font-family:var(--fn-m);font-size:.72rem;padding:5px 14px;background:var(--blue-d);border:1px solid var(--blue-g);color:var(--blue);border-radius:4px;letter-spacing:.08em}
+.mcg{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px;padding:28px;max-width:1160px;margin:0 auto}
+.mc{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:all .25s}
+.mc:hover{transform:translateY(-3px);border-color:rgba(0,200,248,.12)}
+.mc-art{height:320px;position:relative;overflow:hidden;background:linear-gradient(180deg,#0c1424,#09101d);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center;padding:10px}
+.mc-art img{width:100%;height:100%;object-fit:contain;display:block}
+.mc-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border)}
+.mc-name{font-family:var(--fn-d);font-size:1.05rem;letter-spacing:.03em}
+.mc-body{padding:14px}
+.mc-vrow{display:flex;align-items:baseline;gap:7px;margin-bottom:10px}
+.mc-cv{font-family:var(--fn-d);font-size:1.7rem;line-height:1}
+.mc-ov{font-family:var(--fn-m);font-size:.68rem;color:var(--txt3);text-decoration:line-through}
+.mc-delta{font-family:var(--fn-m);font-size:.65rem;font-weight:600;padding:2px 6px;border-radius:3px}
+.mc-delta-d{background:var(--red-d);color:var(--red)}.mc-delta-u{background:var(--green-d);color:var(--green)}
+.mc-cond{font-size:.78rem;color:var(--txt2);line-height:1.5;margin-bottom:10px;padding:9px 11px;background:var(--surface);border-radius:5px;border-left:2px solid var(--txt3)}
+.mc-up{font-family:var(--fn-b);font-weight:700;font-size:.78rem;color:var(--green);margin-bottom:14px}
+.mc-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding:7px 10px;background:var(--surface);border-radius:5px}
+.mc-status{font-family:var(--fn-m);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:5px}
+.s-active{color:var(--green)}.s-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.mc-timer{font-family:var(--fn-m);font-size:.62rem;color:var(--txt3);letter-spacing:.05em}
+.mc-acts{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.mc-sell{font-family:var(--fn-b);font-weight:700;font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;padding:9px;background:transparent;color:var(--txt2);border:1px solid var(--border);border-radius:5px;cursor:pointer;transition:all .2s}
+.mc-sell:hover{color:var(--blue);border-color:var(--blue-g);background:var(--blue-d)}
+.mc-hold-tag{font-family:var(--fn-b);font-weight:700;font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;padding:9px;background:var(--green-d);color:var(--green);border:1px solid rgba(16,212,142,.22);border-radius:5px;text-align:center;cursor:default;font-style:italic}
+.empty-c{text-align:center;padding:70px 24px;display:none}
+.empty-c.on{display:block}
+.empty-icon{font-size:2.8rem;margin-bottom:18px;opacity:.28}
+.empty-t{font-family:var(--fn-d);font-size:1.7rem;color:var(--txt2);margin-bottom:10px}
+.empty-s{font-size:.88rem;color:var(--txt3);margin-bottom:24px}
+
+/* ══ ACTIVITY ══ */
+.act-inner{max-width:740px;margin:0 auto;padding:44px 24px}
+.af{display:flex;flex-direction:column;gap:9px;margin-top:28px}
+.af-item{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:12px;transition:all .25s}
+.af-item.new{animation:afIn .4s ease}
+@keyframes afIn{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:translateX(0)}}
+.af-av{width:34px;height:34px;border-radius:50%;background:var(--elevated);display:flex;align-items:center;justify-content:center;font-family:var(--fn-d);font-size:.85rem;flex-shrink:0;border:1px solid var(--border)}
+.af-txt{flex:1;font-size:.84rem;color:var(--txt2);line-height:1.4}
+.af-u{color:var(--txt);font-weight:700}.af-pk{color:var(--blue);font-weight:600}
+.af-w{color:var(--green);font-weight:700}.af-j{color:var(--gold);font-weight:700}.af-l{color:var(--txt2)}
+.af-t{font-family:var(--fn-m);font-size:.58rem;color:var(--txt3);letter-spacing:.05em;flex-shrink:0}
+.lb-table{width:100%;border-collapse:collapse;margin-top:28px}
+.lb-table th{font-family:var(--fn-m);font-size:.6rem;letter-spacing:.14em;color:var(--txt3);text-align:left;padding:11px 14px;font-weight:400;border-bottom:1px solid var(--border)}
+.lb-row td{padding:12px 14px;border-bottom:1px solid var(--border);font-size:.85rem;font-weight:500}
+.lb-rank{font-family:var(--fn-d);font-size:1.05rem;color:var(--txt3);width:36px}
+.lb-rank.g{color:var(--gold)}
+.lb-user-cell{color:var(--txt);font-weight:700;display:flex;align-items:center;gap:9px}
+.lb-profit{font-family:var(--fn-m);font-size:.82rem;text-align:right}
+.lb-profit.pos{color:var(--green)}.lb-profit.neg{color:var(--red)}
+.lb-cards{font-family:var(--fn-m);font-size:.72rem;color:var(--txt3);text-align:right}
+
+/* ── TOAST ── */
+#toast-box{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:9000;display:flex;flex-direction:column;gap:7px;align-items:center;pointer-events:none}
+.toast{font-family:var(--fn-b);font-weight:600;font-size:.88rem;letter-spacing:.04em;padding:12px 26px;border-radius:5px;backdrop-filter:blur(16px);white-space:nowrap;opacity:0;transform:translateY(10px);transition:all .28s ease;border:1px solid}
+.toast.on{opacity:1;transform:translateY(0)}
+.t-blue{background:rgba(0,200,248,.09);border-color:rgba(0,200,248,.28);color:var(--blue)}
+.t-green{background:rgba(16,212,142,.09);border-color:rgba(16,212,142,.28);color:var(--green)}
+.t-gold{background:rgba(240,180,41,.09);border-color:rgba(240,180,41,.28);color:var(--gold)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  #nav{padding:0 14px}.nav-tabs{display:none}
+  .packs-store{grid-template-columns:1fr}
+  .dm-grid{grid-template-columns:1fr}.dm-hero{grid-template-columns:1fr;gap:20px}
+  .om-reveal{flex-direction:column;align-items:center}
+  .h-h1{font-size:3.4rem}
+  .jp-card{flex-direction:column;gap:16px}.jp-right{text-align:left}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">Sporty <em>Player</em> Cards</div>
+  <div class="nav-tabs">
+    <button class="nav-tab on" id="nt-home" onclick="goPage('home')">Home</button>
+    <button class="nav-tab" id="nt-cards" onclick="goPage('cards')">My Cards</button>
+    <button class="nav-tab" id="nt-activity" onclick="goPage('activity')">Activity</button>
+  </div>
+  <div class="nav-right">
+    <div class="nav-bal" id="nav-bal">500 NGN</div>
+    <button class="nav-cbtn" onclick="goPage('cards')">
+      My Cards <span class="nav-cnt" id="nav-cnt">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ══ HOME ══ -->
+<div class="pg on" id="pg-home">
+
+  <section class="hero">
+    <div class="hero-mesh"></div>
+    <div class="hero-grid"></div>
+    <div class="h-ey">Digital Player Cards · Season 2025</div>
+    <h1 class="h-h1"><span class="bl">Player</span> Cards<br><span class="str">That Evolve</span></h1>
+    <p class="h-sub">Open a pack. Reveal a player card with instant value and an upside condition. Sell now — or hold and bet on the trigger.</p>
+    <div class="h-acts">
+      <button class="btn btn-blue" onclick="document.getElementById('store').scrollIntoView({behavior:'smooth'})">Open a Pack</button>
+      <button class="btn btn-ghost" onclick="goPage('cards')">My Collection</button>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div id="ticker">
+    <div class="tk-label"><div class="tk-dot"></div>Live</div>
+    <div class="tk-track" id="tk-track"></div>
+  </div>
+
+  <!-- STORE -->
+  <section class="section" id="store">
+    <div class="sec-ey">Pack Store</div>
+    <h2 class="sec-h2">Choose Your Universe</h2>
+    <div class="packs-store">
+
+      <!-- STARTER -->
+      <div class="pk pk-s">
+        <div class="pk-tier t-s">Starter</div>
+        <div class="pk-art"><img src="./pack-starter.png" alt="Starter Pack"></div>
+        <div class="pk-name">Starter Pack</div>
+        <div class="pk-price pk-price-s">10 NGN</div>
+        <div class="pk-stock" id="stock-starter">100 LEFT</div>
+        <div class="pk-stats-row">
+          <div class="pk-stat"><div class="pk-stat-v" style="color:var(--silver)">5</div><div class="pk-stat-l">Lowest</div></div>
+          <div class="pk-stat"><div class="pk-stat-v" style="color:var(--silver)">8</div><div class="pk-stat-l">Average</div></div>
+          <div class="pk-stat"><div class="pk-stat-v" style="color:var(--silver)">120</div><div class="pk-stat-l">Highest</div></div>
+        </div>
+        <div class="pk-actions">
+          <button class="pk-btn-view" onclick="openDetail('starter')">View Rewards</button>
+          <button class="pk-btn-open pk-btn-open-s" id="open-starter" onclick="startOpen('starter')">Open · 10 NGN</button>
+        </div>
+      </div>
+
+      <!-- PRO -->
+      <div class="pk pk-p">
+        <div class="pk-tier t-p">Pro</div>
+        <div class="pk-art"><img src="./pack-pro.png" alt="Pro Pack"></div>
+        <div class="pk-name">Pro Pack</div>
+        <div class="pk-price pk-price-p">50 NGN</div>
+        <div class="pk-stock" id="stock-pro">100 LEFT</div>
+        <div class="pk-stats-row">
+          <div class="pk-stat"><div class="pk-stat-v" style="color:var(--blue)">30</div><div class="pk-stat-l">Lowest</div></div>
+          <div class="pk-stat"><div class="pk-stat-v" style="color:var(--blue)">49</div><div class="pk-stat-l">Average</div></div>
+          <div class="pk-stat"><div class="pk-stat-v" style="color:var(--blue)">600</div><div class="pk-stat-l">Highest</div></div>
+        </div>
+        <div class="pk-actions">
+          <button class="pk-btn-view" onclick="openDetail('pro')">View Rewards</button>
+          <button class="pk-btn-open pk-btn-open-p" id="open-pro" onclick="startOpen('pro')">Open · 50 NGN</button>
+        </div>
+      </div>
+
+      <!-- ELITE -->
+      <div class="pk pk-e">
+        <div class="pk-tier t-e">Elite</div>
+        <div class="pk-art"><img src="./pack-elite.png" alt="Elite Pack"></div>
+        <div class="pk-name">Elite Pack</div>
+        <div class="pk-price pk-price-e">100 NGN</div>
+        <div class="pk-stock" id="stock-elite">100 LEFT</div>
+        <div class="pk-stats-row">
+          <div class="pk-stat"><div class="pk-stat-v" style="color:var(--gold)">60</div><div class="pk-stat-l">Lowest</div></div>
+          <div class="pk-stat"><div class="pk-stat-v" style="color:var(--gold)">98</div><div class="pk-stat-l">Average</div></div>
+          <div class="pk-stat"><div class="pk-stat-v" style="color:var(--gold)">3000</div><div class="pk-stat-l">Highest</div></div>
+        </div>
+        <div class="pk-actions">
+          <button class="pk-btn-view" onclick="openDetail('elite')">View Rewards</button>
+          <button class="pk-btn-open pk-btn-open-e" id="open-elite" onclick="startOpen('elite')">Open · 100 NGN</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div><!-- /home -->
+
+<!-- ══ MY CARDS ══ -->
+<div class="pg" id="pg-cards">
+  <div class="cards-hd">
+    <div>
+      <div class="sec-ey" style="margin-bottom:8px">Collection</div>
+      <h2 class="sec-h2" style="margin-bottom:0">My Cards</h2>
+    </div>
+    <div class="cards-badge" id="cards-badge">0 Cards</div>
+  </div>
+  <div class="empty-c on" id="empty-c">
+    <div class="empty-icon">⚡</div>
+    <div class="empty-t">No Cards Yet</div>
+    <p class="empty-s">Open a pack and hold a card to build your collection.</p>
+    <button class="btn btn-blue" onclick="goPage('home')">Open a Pack</button>
+  </div>
+  <div class="mcg" id="mcg"></div>
+</div>
+
+<!-- ══ ACTIVITY ══ -->
+<div class="pg" id="pg-activity">
+  <div class="act-inner">
+    <div class="sec-ey">Social Layer</div>
+    <h2 class="sec-h2">Live Activity</h2>
+    <div class="af" id="af"></div>
+    <div style="margin-top:56px">
+      <div class="sec-ey" style="margin-bottom:10px">Rankings</div>
+      <h3 style="font-family:var(--fn-d);font-size:1.7rem;margin-bottom:0">Top Earners</h3>
+      <table class="lb-table"><thead><tr>
+        <th>#</th><th>Player</th><th style="text-align:right">Profit</th><th style="text-align:right">Cards</th>
+      </tr></thead><tbody id="lb-body"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PACK DETAIL MODAL ══ -->
+<div id="detail-modal">
+  <div class="dm-inner">
+    <div class="dm-topbar">
+      <button class="dm-back" onclick="closeDetail()">← Back</button>
+      <div id="dm-title" style="font-family:var(--fn-d);font-size:1.4rem;letter-spacing:.04em"></div>
+      <button class="dm-open-btn" id="dm-open-btn" onclick="openFromDetail()">Open Pack</button>
+    </div>
+
+    <!-- HERO ROW -->
+    <div class="dm-hero">
+      <div class="dm-pack-vis" id="dm-pack-vis">
+        <div class="dmpv-shine"></div>
+        <img class="dm-pack-img" id="dm-pack-img" src="./pack-starter.png" alt="Starter Pack">
+      </div>
+      <div class="dm-info">
+        <div class="dm-pack-title" id="dm-big-title">Starter Pack</div>
+        <div class="dm-pack-stock" id="dm-pack-stock">100 LEFT</div>
+        <div class="dm-pack-sub" id="dm-sub"></div>
+        <div class="dm-3stats" id="dm-3stats"></div>
+        <div class="dm-notice" id="dm-notice">Distribution based on full pack configuration · Inventory not disclosed</div>
+      </div>
+    </div>
+
+    <!-- GRID: Distribution + Pie -->
+    <div class="dm-grid">
+      <div class="dm-box">
+        <div class="dm-box-hd"><div class="dm-box-hd-label">Value Distribution</div></div>
+        <div class="dm-box-body"><table class="dist-table" id="dm-dist-table">
+          <thead><tr><th>Price Range</th><th>Breakdown</th><th>%</th></tr></thead>
+          <tbody id="dm-dist-body"></tbody>
+        </table></div>
+      </div>
+      <div class="dm-box">
+        <div class="dm-box-hd"><div class="dm-box-hd-label">Probability Breakdown</div></div>
+        <div class="dm-box-body">
+          <div class="pie-wrap">
+            <div class="pie-svg-wrap"><svg id="pie-svg" viewBox="0 0 100 100" width="140" height="140"></svg></div>
+            <div class="pie-legend" id="pie-legend"></div>
+          </div>
+          <div style="font-family:var(--fn-m);font-size:.56rem;letter-spacing:.1em;color:var(--txt3);margin-top:16px;text-align:center;text-transform:uppercase">Distribution based on full pack configuration</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JACKPOT CARD -->
+    <div class="dm-box dm-full">
+      <div class="dm-box-hd"><div class="dm-box-hd-label">Top Reward · Jackpot</div></div>
+      <div class="dm-box-body"><div id="dm-jackpot"></div></div>
+    </div>
+
+    <!-- REWARD TIERS -->
+    <div class="dm-box dm-full">
+      <div class="dm-box-hd"><div class="dm-box-hd-label">Reward Preview</div></div>
+      <div class="dm-box-body">
+        <div id="dm-rewards"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ OPENING MODAL ══ -->
+<div id="open-modal">
+  <button class="om-close" onclick="closeOpenModal()">✕ Close</button>
+  <div class="om-inner">
+    <!-- Stage 1 -->
+    <div class="om-stage" id="om-stage">
+      <div class="pa-wrap" id="pa-wrap" onclick="triggerReveal()">
+        <div class="pa-body" id="pa-body">
+          <div class="pa-shine"></div>
+          <img class="pa-pack-img" id="pa-pack-img" src="./pack-starter.png" alt="Starter Pack">
+        </div>
+      </div>
+      <div class="om-hint" id="om-hint">Tap pack to open</div>
+    </div>
+    <!-- Stage 2 -->
+    <div class="om-reveal" id="om-reveal">
+      <div class="plcard" id="pl-card">
+        <div class="plcard-art"><img id="pl-art-img" src="./card01.png" alt="Player card art"></div>
+        <div class="plcard-holo"></div>
+        <div class="plcard-val"><span class="plcard-num" id="pl-num">85</span><span class="plcard-unit">NGN</span></div>
+        <div class="plcard-foot">
+          <div class="plcard-cl">Trigger Condition</div>
+          <div class="plcard-ct" id="pl-cond-s">Score a hat-trick</div>
+          <div class="plcard-up" id="pl-up-s">→ 140 NGN if triggered</div>
+        </div>
+      </div>
+      <div class="rp">
+        <div class="rp-ey">You revealed</div>
+        <div class="rp-player" id="rp-player">Lionel Vega</div>
+        <div class="rp-vb rp-vb-blue">
+          <div class="rp-vl">Instant Value</div>
+          <div class="rp-vn rp-vn-b" id="rp-val">85 NGN</div>
+          <div class="rp-vs2" id="rp-vs">Pack cost: 10 NGN</div>
+        </div>
+        <div class="rp-vb rp-vb-green">
+          <div class="rp-vl">If Condition Triggers</div>
+          <div class="rp-vn rp-vn-g" id="rp-up">140 NGN</div>
+          <div class="rp-vs2" id="rp-up-s">Upside potential</div>
+        </div>
+        <div class="rp-cond-box">
+          <div class="rp-cl">Trigger Condition</div>
+          <div class="rp-ct" id="rp-cond">Score a hat-trick in any match before season end</div>
+        </div>
+        <div class="dz">
+          <div class="dz-sell" onclick="sellCard()">
+            <div class="dz-l">Sell Now</div>
+            <div class="dz-v" id="dz-sv">85 NGN</div>
+            <div class="dz-s">Guaranteed exit</div>
+            <div class="dz-r">Safe — lock in value</div>
+          </div>
+          <div class="dz-hold" onclick="holdCard()">
+            <div class="dz-l">Hold Card</div>
+            <div class="dz-v" id="dz-hv">140 NGN</div>
+            <div class="dz-s">If trigger fires</div>
+            <div class="dz-r">Risk it for upside</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast-box"></div>
+
+<script>
+// ══════════════════════════════════════════════════
+// PACK UNIVERSE DATA
+// ══════════════════════════════════════════════════
+function createValueSeries(count, min, max) {
+  if (count <= 0) return [];
+  if (count === 1) return [Math.round((min + max) / 2)];
+  return Array.from({ length: count }, (_, index) =>
+    Math.round(min + ((max - min) * index) / (count - 1))
+  );
+}
+
+function createMidValueSeries(count, min, max, packPrice) {
+  const belowCount = Math.floor(count / 2);
+  const aboveCount = count - belowCount;
+  const belowMax = Math.max(min, packPrice - 1);
+  const aboveMin = Math.max(packPrice, min);
+  return [
+    ...createValueSeries(belowCount, min, belowMax),
+    ...createValueSeries(aboveCount, aboveMin, max)
+  ];
+}
+
+function buildRewardTier(seedCards, config) {
+  const values = config.mode === 'mid'
+    ? createMidValueSeries(config.count, config.min, config.max, config.packPrice)
+    : createValueSeries(config.count, config.min, config.max);
+
+  return values.map((value, index) => {
+    const base = seedCards[index % seedCards.length];
+    const ratio = base.up / base.v;
+    return {
+      ...base,
+      code: `${config.prefix}-${String(index + 1).padStart(3, '0')}`,
+      v: value,
+      up: Math.round(value * ratio),
+      previewTier: config.previewTier
+    };
+  });
+}
+
+function buildRewardSet(config) {
+  return {
+    low: buildRewardTier(config.low.cards, { ...config.low, previewTier:'low' }),
+    mid: buildRewardTier(config.mid.cards, { ...config.mid, previewTier:'mid' }),
+    high: buildRewardTier(config.high.cards, { ...config.high, previewTier:'high' })
+  };
+}
+
+const PACK_DATA = {
+  starter: {
+    label:'Starter Pack', price:10, icon:'⚽', accentVar:'var(--silver)',
+    packVisCls:'dmpv-s', paBodyCls:'pa-s', glowCls:'glow-s',
+    imageSrc:'./pack-starter.png',
+    openBtnCls:'dm-open-btn-s',
+    remaining:100,
+    total:100,
+    cardCount:100,
+    sub:'Entry-level pack. Most cards return below the 10 NGN cost — but rare finds can surprise. Low stakes, real upside.',
+    stats:{ low:'5 NGN', avg:'8 NGN', high:'120 NGN' },
+    distBands:[
+      { range:'5 – 9 NGN',   pct:70, tier:'Low',  barColor:'var(--silver)' },
+      { range:'6 – 11 NGN',  pct:20, tier:'Mid',  barColor:'var(--blue)' },
+      { range:'12 – 20 NGN', pct:8,  tier:'High', barColor:'var(--gold)' },
+      { range:'21 – 120 NGN',pct:2,  tier:'Top',  barColor:'var(--elite)' },
+    ],
+    pieTiers:[
+      { label:'Low Tier (5–9)',    pct:70, color:'var(--silver)' },
+      { label:'Mid Tier (6–11)',   pct:20, color:'var(--blue)' },
+      { label:'High Tier (12+)',   pct:10, color:'var(--gold)' },
+    ],
+    jackpot:{ player:'Bruno Castillo', pos:'Striker · Real Castilla FC', value:120, condition:'Score a hat-trick in a derby match before season end', upgraded:200, prob:'1%', cardCls:'jp-card-s', badgeCls:'badge-s', valCls:'jp-val-s', glowCls:'jp-glow-s' },
+    rewards:buildRewardSet({
+      low:{ count:70, prefix:'STA-L', min:5, max:9, cards:[
+        {n:'Erik Sørensen',v:7,pos:'Midfielder · Nordic City FC',cond:'Complete 90%+ pass accuracy in 2 matches',up:11},
+        {n:'Tomáš Novák',v:6,pos:'Goalkeeper · Bohemia AC',cond:'Keep a clean sheet in 3 consecutive matches',up:9},
+        {n:'Niko Papadakis',v:8,pos:'Defender · Hellas City FC',cond:'Score 1 goal from a set piece',up:13},
+        {n:'Mateo Silva',v:7,pos:'Winger · Porto Azul',cond:'Create 2 big chances in one match',up:11}
+      ]},
+      mid:{ count:20, prefix:'STA-M', min:6, max:11, packPrice:10, mode:'mid', cards:[
+        {n:'Marcus Rashidov',v:12,pos:'Winger · East United FC',cond:'Score and assist in the same match',up:19},
+        {n:'Andrés Reyes',v:14,pos:'Midfielder · Atlético Sur',cond:'Win player of the match 2 times',up:22},
+        {n:'Ivan Petrov',v:13,pos:'Midfielder · Sofia Lions',cond:'Hit 85%+ pass accuracy in 4 matches',up:20}
+      ]},
+      high:{ count:10, prefix:'STA-H', min:12, max:20, cards:[
+        {n:'Sadio Beaumont',v:28,pos:'Winger · Paris Olympique',cond:'Contribute a goal or assist in 5 consecutive matches',up:46},
+        {n:'Jin-ho Park',v:35,pos:'Striker · Seoul Lions FC',cond:'Score in the final 10 min of 3 matches',up:58},
+        {n:'Bruno Castillo',v:32,pos:'Striker · Real Castilla FC',cond:'Score a brace in a derby',up:51}
+      ]}
+    })
+  },
+  pro: {
+    label:'Pro Pack', price:50, icon:'🏆', accentVar:'var(--blue)',
+    packVisCls:'dmpv-p', paBodyCls:'pa-p', glowCls:'glow-p',
+    imageSrc:'./pack-pro.png',
+    openBtnCls:'dm-open-btn-p',
+    remaining:100,
+    total:100,
+    cardCount:100,
+    sub:'Balanced risk profile. Most cards sit near the 50 NGN mark, but the top 15% tier delivers serious returns. A pro move.',
+    stats:{ low:'30 NGN', avg:'49 NGN', high:'600 NGN' },
+    distBands:[
+      { range:'30 – 45 NGN',  pct:50, tier:'Low',  barColor:'var(--silver)' },
+      { range:'38 – 60 NGN',  pct:30, tier:'Mid',  barColor:'var(--blue)' },
+      { range:'61 – 95 NGN',  pct:15, tier:'High', barColor:'var(--gold)' },
+      { range:'96 – 600 NGN', pct:5,  tier:'Top',  barColor:'var(--elite)' },
+    ],
+    pieTiers:[
+      { label:'Low Tier (30–45)',   pct:50, color:'var(--silver)' },
+      { label:'Mid Tier (38–60)',   pct:30, color:'var(--blue)' },
+      { label:'High Tier (61+)',    pct:20, color:'var(--gold)' },
+    ],
+    jackpot:{ player:'Neymar da Costa', pos:'Forward · Brazilia SC', value:600, condition:'Score a free-kick goal in a knockout stage match', upgraded:1000, prob:'1%', cardCls:'jp-card-p', badgeCls:'badge-s', valCls:'jp-val-p', glowCls:'jp-glow-p' },
+    rewards:buildRewardSet({
+      low:{ count:50, prefix:'PRO-L', min:30, max:45, cards:[
+        {n:'Roberto Müller',v:38,pos:'Midfielder · Rheingold FC',cond:'Keep 90%+ pass accuracy in 3 matches',up:58},
+        {n:'Yusuf Okafor',v:42,pos:'Defender · Lagos Elite SC',cond:'Score 2 goals from set pieces',up:64},
+        {n:'Kevin Papadakis',v:35,pos:'Defender · Hellas City FC',cond:'Win 4 clean sheets as captain',up:54},
+        {n:'Thiago Mendes',v:40,pos:'Fullback · Lisboa FC',cond:'Deliver 3 assists across 4 matches',up:61}
+      ]},
+      mid:{ count:30, prefix:'PRO-M', min:38, max:60, packPrice:50, mode:'mid', cards:[
+        {n:'Luka Petrović',v:62,pos:'Midfielder · Dynamo Zagreb SC',cond:'Provide 3 assists in a single match',up:96},
+        {n:'Mohamed Diallo',v:70,pos:'Midfielder · Sahel United',cond:'Complete 90%+ accuracy in 4 matches',up:109},
+        {n:'Marcus Rashidov',v:68,pos:'Winger · East United FC',cond:'Score and assist in the same match twice',up:104}
+      ]},
+      high:{ count:20, prefix:'PRO-H', min:61, max:95, cards:[
+        {n:'Kylian Ferreira',v:155,pos:'Winger · Atlantique FC',cond:'Score in 5 consecutive league matches',up:248},
+        {n:'Erling Sørensen',v:180,pos:'Striker · Nordic City FC',cond:'Finish top scorer in a cup tournament',up:295},
+        {n:'Neymar da Costa',v:165,pos:'Forward · Brazilia SC',cond:'Score a free-kick in a knockout match',up:270}
+      ]}
+    })
+  },
+  elite: {
+    label:'Elite Pack', price:100, icon:'💎', accentVar:'var(--gold)',
+    packVisCls:'dmpv-e', paBodyCls:'pa-e', glowCls:'glow-e',
+    imageSrc:'./pack-elite.png',
+    openBtnCls:'dm-open-btn-e',
+    remaining:100,
+    total:100,
+    cardCount:100,
+    sub:'The pinnacle tier. Entry is guaranteed above 60 NGN, with real jackpot probability. Elite cards carry legendary upside conditions.',
+    stats:{ low:'60 NGN', avg:'98 NGN', high:'3,000 NGN' },
+    distBands:[
+      { range:'60 – 95 NGN',    pct:45, tier:'Low',  barColor:'var(--silver)' },
+      { range:'70 – 120 NGN',   pct:30, tier:'Mid',  barColor:'var(--blue)' },
+      { range:'121 – 150 NGN',  pct:15, tier:'High', barColor:'var(--gold)' },
+      { range:'151 – 1500 NGN', pct:9,  tier:'Ultra', barColor:'var(--elite)' },
+      { range:'1501 – 3000 NGN',pct:1,  tier:'Jackpot',barColor:'var(--gold)' },
+    ],
+    pieTiers:[
+      { label:'Low Tier (60–95)',   pct:45, color:'var(--silver)' },
+      { label:'Mid Tier (70–120)',  pct:30, color:'var(--blue)' },
+      { label:'High Tier (121+)',   pct:25, color:'var(--gold)' },
+    ],
+    jackpot:{ player:'Cristiano Mendes', pos:'Forward · FC Verona', value:3000, condition:'Finish as the season\'s top scorer with 30+ goals in all competitions', upgraded:5000, prob:'1%', cardCls:'jp-card jp-card', badgeCls:'badge-g', valCls:'jp-val-e', glowCls:'jp-glow-e' },
+    rewards:buildRewardSet({
+      low:{ count:45, prefix:'ELI-L', min:60, max:95, cards:[
+        {n:'Andrés Reyes',v:78,pos:'Midfielder · Atlético Sur',cond:'Win player of the match award 3 times',up:122},
+        {n:'Jin-ho Park',v:85,pos:'Striker · Seoul Lions FC',cond:'Score in the final 10 min of 3 matches',up:135},
+        {n:'Yusuf Okafor',v:92,pos:'Defender · Lagos Elite SC',cond:'Score 2 goals from set pieces this season',up:146},
+        {n:'Mohamed Diallo',v:88,pos:'Midfielder · Sahel United',cond:'Complete 90%+ accuracy in 5 matches',up:140}
+      ]},
+      mid:{ count:30, prefix:'ELI-M', min:70, max:120, packPrice:100, mode:'mid', cards:[
+        {n:'Sadio Beaumont',v:160,pos:'Winger · Paris Olympique',cond:'Contribute a goal or assist in 6 consecutive matches',up:256},
+        {n:'Marcus Rashidov',v:185,pos:'Winger · East United FC',cond:'Score and assist in the same match, 3 times',up:298},
+        {n:'Luka Petrović',v:175,pos:'Midfielder · Dynamo Zagreb SC',cond:'Provide 5 assists across 3 matches',up:280}
+      ]},
+      high:{ count:25, prefix:'ELI-H', min:121, max:150, cards:[
+        {n:'Kylian Ferreira',v:320,pos:'Winger · Atlantique FC',cond:'Score in 5 consecutive league matches',up:530},
+        {n:'Neymar da Costa',v:400,pos:'Forward · Brazilia SC',cond:'Score a free-kick goal in a knockout match',up:660},
+        {n:'Cristiano Mendes',v:360,pos:'Forward · FC Verona',cond:'Record 3 match-winning goals in a month',up:590}
+      ]}
+    })
+  }
+};
+
+// draw logic bands for actual draws
+const DRAW_BANDS = {
+  starter:[ {w:70,min:5,max:9,tier:'Silver'},{w:20,min:10,max:15,tier:'Silver'},{w:8,min:16,max:40,tier:'Gold'},{w:2,min:41,max:120,tier:'Elite'} ],
+  pro:    [ {w:50,min:30,max:45,tier:'Silver'},{w:30,min:46,max:75,tier:'Gold'},{w:15,min:76,max:200,tier:'Gold'},{w:5,min:201,max:600,tier:'Elite'} ],
+  elite:  [ {w:45,min:60,max:99,tier:'Silver'},{w:30,min:100,max:200,tier:'Gold'},{w:15,min:201,max:400,tier:'Gold'},{w:9,min:401,max:1500,tier:'Elite'},{w:1,min:1501,max:3000,tier:'Elite'} ],
+};
+
+const TIER_VIS = {
+  Silver:{ cardCls:'plcard-s', badge:'badge-s', valColor:'var(--silver)' },
+  Gold:  { cardCls:'plcard-g', badge:'badge-g', valColor:'var(--gold)' },
+  Elite: { cardCls:'plcard-el',badge:'badge-el',valColor:'var(--elite)' },
+};
+
+const PLAYER_CARD_ARTS = [
+  { key:'mbappe', src:'./card01.png' },
+  { key:'messi', src:'./card02.png' },
+  { key:'ronaldo', src:'./card03.png' },
+  { key:'neymar', src:'./card04.png' },
+  { key:'haaland', src:'./card05.png' },
+  { key:'bellingham', src:'./card06.png' },
+  { key:'de bruyne', src:'./card07.png' },
+  { key:'van dijk', src:'./card08.png' },
+  { key:'pedri', src:'./card09.png' },
+  { key:'musiala', src:'./card10.png' },
+];
+
+function getPlayerCardArt(name='') {
+  const lower = name.toLowerCase();
+  const direct = PLAYER_CARD_ARTS.find(a => lower.includes(a.key));
+  if (direct) return direct.src;
+  const sum = [...lower].reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+  return PLAYER_CARD_ARTS[sum % PLAYER_CARD_ARTS.length].src;
+}
+
+const PREVIEW_TIER_TO_CARD_TIER = { low:'Silver', mid:'Gold', high:'Elite' };
+const PACK_POOLS = Object.fromEntries(
+  Object.entries(PACK_DATA).map(([key, data]) => [
+    key,
+    [...data.rewards.low, ...data.rewards.mid, ...data.rewards.high]
+  ])
+);
+
+Object.entries(PACK_POOLS).forEach(([key, pool]) => {
+  const avg = pool.reduce((sum, card) => sum + card.v, 0) / pool.length;
+  PACK_DATA[key].stats.avg = `${Math.floor(avg)} NGN`;
+});
+
+const ALL_PLAYERS = [
+  { name:'Cristiano Mendes',  pos:'Forward · FC Verona',          cond:'Score a hat-trick in any match before season end',             uM:1.65 },
+  { name:'Luka Petrović',     pos:'Midfielder · Dynamo Zagreb SC', cond:'Provide 3 assists in a single match',                          uM:1.52 },
+  { name:'Kylian Ferreira',   pos:'Winger · Atlantique FC',        cond:'Score in 5 consecutive league matches',                        uM:1.68 },
+  { name:'Erling Sørensen',   pos:'Striker · Nordic City FC',      cond:'Finish top scorer in a cup tournament',                        uM:1.62 },
+  { name:'Mohamed Diallo',    pos:'Midfielder · Sahel United',     cond:'Complete 90%+ pass accuracy in 4 consecutive matches',         uM:1.56 },
+  { name:'Neymar da Costa',   pos:'Forward · Brazilia SC',         cond:'Score a free-kick goal in a knockout stage match',             uM:1.80 },
+  { name:'Marcus Rashidov',   pos:'Winger · East United FC',       cond:'Score and assist in the same match, 3 times',                  uM:1.61 },
+  { name:'Roberto Müller',    pos:'Midfielder · Rheingold FC',     cond:'Keep 90%+ pass accuracy in 3 consecutive matches',             uM:1.46 },
+  { name:'Jin-ho Park',       pos:'Striker · Seoul Lions FC',      cond:'Score in the final 10 minutes of 3 matches',                   uM:1.64 },
+  { name:'Yusuf Okafor',      pos:'Defender · Lagos Elite SC',     cond:'Score 2 goals from set pieces this season',                    uM:1.50 },
+  { name:'Andrés Reyes',      pos:'Midfielder · Atlético Sur',     cond:'Win player of the match award 3 times',                        uM:1.55 },
+  { name:'Kevin Papadakis',   pos:'Defender · Hellas City FC',     cond:'Win 4 consecutive clean sheets as team captain',               uM:1.60 },
+  { name:'Tomáš Novák',       pos:'Goalkeeper · Bohemia AC',       cond:'Make 12+ saves in a single match',                             uM:1.70 },
+  { name:'Sadio Beaumont',    pos:'Winger · Paris Olympique',      cond:'Contribute a goal or assist in 6 consecutive matches',         uM:1.74 },
+  { name:'Bruno Castillo',    pos:'Striker · Real Castilla FC',    cond:'Score a hat-trick in a derby match',                           uM:1.90 },
+];
+
+// ══════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════
+let balance = 500;
+let myCards = [];
+let cardId = 0;
+let currentPackType = null;
+let currentCard = null;
+let revealReady = false;
+let actLog = [];
+
+function formatPackStock(count) {
+  return `${count.remaining} LEFT`;
+}
+
+function updatePackStockUI() {
+  Object.entries(PACK_DATA).forEach(([key, data]) => {
+    const stockEl = document.getElementById(`stock-${key}`);
+    if (stockEl) stockEl.textContent = formatPackStock(data);
+
+    const openBtn = document.getElementById(`open-${key}`);
+    if (openBtn) openBtn.disabled = data.remaining <= 0;
+  });
+
+  if (currentPackType && document.getElementById('detail-modal').classList.contains('on')) {
+    const d = PACK_DATA[currentPackType];
+    document.getElementById('dm-pack-stock').textContent = formatPackStock(d);
+    const detailBtn = document.getElementById('dm-open-btn');
+    detailBtn.disabled = d.remaining <= 0;
+    detailBtn.textContent = d.remaining <= 0 ? 'Sold Out' : `Open · ${d.price} NGN`;
+  }
+}
+
+// ══════════════════════════════════════════════════
+// NAV
+// ══════════════════════════════════════════════════
+function goPage(p) {
+  document.querySelectorAll('.pg').forEach(el => el.classList.remove('on'));
+  document.getElementById('pg-'+p).classList.add('on');
+  ['home','cards','activity'].forEach(id => {
+    const el = document.getElementById('nt-'+id);
+    if (el) el.classList.toggle('on', id === p);
+  });
+  if (p === 'activity') renderActivity();
+}
+
+// ══════════════════════════════════════════════════
+// PACK DETAIL MODAL
+// ══════════════════════════════════════════════════
+function openDetail(type) {
+  const d = PACK_DATA[type];
+  currentPackType = type;
+
+  document.getElementById('detail-modal').classList.add('on');
+  document.getElementById('dm-title').textContent = d.label;
+  document.getElementById('dm-big-title').textContent = d.label;
+  document.getElementById('dm-pack-stock').textContent = formatPackStock(d);
+  document.getElementById('dm-sub').textContent = d.sub;
+  document.getElementById('dm-notice').textContent = `${d.cardCount} cards in this series · Reward Preview shows the full pool by tier`;
+
+  // Pack visual
+  const pv = document.getElementById('dm-pack-vis');
+  pv.className = 'dm-pack-vis ' + d.packVisCls;
+  const dmPackImg = document.getElementById('dm-pack-img');
+  dmPackImg.src = d.imageSrc;
+  dmPackImg.alt = d.label;
+
+  // Open btn
+  const ob = document.getElementById('dm-open-btn');
+  ob.className = 'dm-open-btn ' + d.openBtnCls;
+  ob.textContent = d.remaining <= 0 ? 'Sold Out' : 'Open · ' + d.price + ' NGN';
+  ob.disabled = d.remaining <= 0;
+
+  // 3 stats
+  document.getElementById('dm-3stats').innerHTML = `
+    <div class="dm-stat"><div class="dm-stat-v" style="color:${d.accentVar}">${d.stats.low}</div><div class="dm-stat-l">Lowest</div></div>
+    <div class="dm-stat"><div class="dm-stat-v" style="color:${d.accentVar}">${d.stats.avg}</div><div class="dm-stat-l">Average</div></div>
+    <div class="dm-stat"><div class="dm-stat-v" style="color:${d.accentVar}">${d.stats.high}</div><div class="dm-stat-l">Highest</div></div>
+  `;
+
+  // Distribution table
+  document.getElementById('dm-dist-body').innerHTML = d.distBands.map(b => `
+    <tr class="dist-row">
+      <td class="dist-range">${b.range}</td>
+      <td><div class="dist-pct-bar"><div class="dist-bar-track"><div class="dist-bar-fill" style="width:${b.pct}%;background:${b.barColor}"></div></div></div></td>
+      <td class="dist-pct-num">${b.pct}%</td>
+    </tr>
+  `).join('');
+
+  // Pie chart
+  drawPie(d.pieTiers);
+
+  // Rewards
+  renderRewards(d.rewards, d.accentVar);
+
+  // Jackpot
+  renderJackpot(d.jackpot);
+}
+
+function closeDetail() {
+  document.getElementById('detail-modal').classList.remove('on');
+}
+
+function openFromDetail() {
+  closeDetail();
+  startOpen(currentPackType);
+}
+
+function drawPie(tiers) {
+  const svg = document.getElementById('pie-svg');
+  svg.innerHTML = '';
+  const cx=50, cy=50, r=46;
+  let startAngle = -90;
+
+  tiers.forEach(tier => {
+    const angle = (tier.pct / 100) * 360;
+    const endAngle = startAngle + angle;
+    const x1 = cx + r * Math.cos(startAngle * Math.PI/180);
+    const y1 = cy + r * Math.sin(startAngle * Math.PI/180);
+    const x2 = cx + r * Math.cos(endAngle * Math.PI/180);
+    const y2 = cy + r * Math.sin(endAngle * Math.PI/180);
+    const lg = angle > 180 ? 1 : 0;
+    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+    // resolve CSS var to hex for SVG
+    const colorMap = {'var(--silver)':'#94a3c4','var(--blue)':'#00c8f8','var(--gold)':'#f0b429','var(--elite)':'#c084fc','var(--green)':'#10d48e'};
+    const fillColor = colorMap[tier.color] || '#94a3c4';
+    path.setAttribute('d',`M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${lg},1 ${x2},${y2} Z`);
+    path.setAttribute('fill', fillColor);
+    path.setAttribute('opacity','0.85');
+    path.setAttribute('stroke','#05070e');
+    path.setAttribute('stroke-width','1.5');
+    svg.appendChild(path);
+    startAngle = endAngle;
+  });
+
+  // center hole
+  const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  circle.setAttribute('cx',cx); circle.setAttribute('cy',cy); circle.setAttribute('r','22');
+  circle.setAttribute('fill','#090c17');
+  svg.appendChild(circle);
+
+  // legend
+  document.getElementById('pie-legend').innerHTML = tiers.map(t => {
+    const colorMap = {'var(--silver)':'#94a3c4','var(--blue)':'#00c8f8','var(--gold)':'#f0b429','var(--elite)':'#c084fc'};
+    const c = colorMap[t.color] || '#94a3c4';
+    return `<div class="pie-leg-item"><div class="pie-dot" style="background:${c}"></div><div>${t.label}</div><div class="pie-pct">${t.pct}%</div></div>`;
+  }).join('');
+}
+
+function renderRewards(rw, accent) {
+  const sections = [
+    { key:'high', label:'High Tier', cls:'rt-big-l' },
+    { key:'mid', label:'Mid Tier', cls:'rt-mid-l' },
+    { key:'low', label:'Low Tier', cls:'rt-small-l' },
+  ];
+  document.getElementById('dm-rewards').innerHTML = sections.map(s => `
+    <div class="rt-section">
+      <div class="rt-header"><span class="rt-label ${s.cls}">${s.label}</span><span class="rt-count">${rw[s.key].length} Cards · Swipe</span></div>
+      <div class="rt-cards-row">
+        ${[...rw[s.key]].sort((a, b) => (b.v - a.v) || (b.up - a.up) || a.n.localeCompare(b.n)).map(c => `
+        <div class="rt-mini-card">
+          <div class="rt-mini-art"><img src="${getPlayerCardArt(c.n)}" alt="${c.n} card art"></div>
+          <div class="rtmc-code">${c.code}</div>
+          <div class="rtmc-name">${c.n}</div>
+          <div class="rtmc-val" style="color:${accent}">${c.v} NGN</div>
+          <div class="rtmc-pos">${c.pos}</div>
+          <div class="rtmc-cond">${c.cond}</div>
+          <div class="rtmc-upside">↑ ${c.up} NGN if triggered</div>
+        </div>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderJackpot(jp) {
+  document.getElementById('dm-jackpot').innerHTML = `
+    <div class="jp-card ${jp.cardCls}" style="position:relative">
+      <div class="jp-glow ${jp.glowCls}"></div>
+      <div class="jp-badge ${jp.badgeCls}">Jackpot</div>
+      <div class="jp-art">
+        <img src="${getPlayerCardArt(jp.player)}" alt="${jp.player} card art">
+      </div>
+      <div class="jp-left">
+        <div class="jp-top-label">Top Card · Maximum Reward</div>
+        <div class="jp-player">${jp.player}</div>
+        <div class="jp-pos">${jp.pos}</div>
+        <div class="jp-cond-l">Trigger Condition</div>
+        <div class="jp-cond">${jp.condition}</div>
+        <div class="jp-upside">↑ ${jp.upgraded.toLocaleString()} NGN if triggered</div>
+      </div>
+      <div class="jp-right">
+        <div class="jp-val-l">Card Value</div>
+        <div class="jp-val ${jp.valCls}">${jp.value.toLocaleString()}</div>
+        <div class="jp-val-unit">NGN</div>
+        <div class="jp-prob">Probability: ${jp.prob}</div>
+      </div>
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════════
+// OPENING MODAL
+// ══════════════════════════════════════════════════
+function startOpen(type) {
+  const d = PACK_DATA[type];
+  if (d.remaining <= 0) { showToast('Pack sold out', 't-blue'); return; }
+  currentPackType = type;
+  revealReady = false;
+
+  // reset
+  document.getElementById('om-stage').style.display = 'flex';
+  document.getElementById('om-reveal').classList.remove('on');
+  document.getElementById('om-hint').textContent = 'Tap pack to open';
+  document.getElementById('om-hint').style.display = '';
+
+  const body = document.getElementById('pa-body');
+  body.className = 'pa-body ' + d.paBodyCls;
+  const paPackImg = document.getElementById('pa-pack-img');
+  paPackImg.src = d.imageSrc;
+  paPackImg.alt = d.label;
+
+  document.getElementById('open-modal').classList.add('on');
+}
+
+function triggerReveal() {
+  if (revealReady) return;
+  const d = PACK_DATA[currentPackType];
+  if (d.remaining <= 0) { showToast('Pack sold out', 't-blue'); closeOpenModal(); return; }
+  if (balance < d.price) { showToast('Insufficient balance', 't-blue'); closeOpenModal(); return; }
+  revealReady = true;
+
+  document.getElementById('om-hint').textContent = 'Opening…';
+  const body = document.getElementById('pa-body');
+
+  body.classList.add('shaking');
+  setTimeout(() => {
+    body.classList.remove('shaking');
+    body.classList.add(d.glowCls);
+  }, 1200);
+
+  setTimeout(() => {
+    body.classList.remove(d.glowCls);
+    balance -= d.price;
+    d.remaining -= 1;
+    updateBalance();
+    updatePackStockUI();
+
+    currentCard = drawCard(currentPackType);
+    populateReveal(currentCard);
+
+    document.getElementById('om-stage').style.display = 'none';
+    document.getElementById('om-reveal').classList.add('on');
+
+    addActEntry(`opened <span class="af-pk">${d.label}</span> → <span class="${currentCard.value >= d.price ? 'af-w' : 'af-l'}">${currentCard.value} NGN</span> (${currentCard.playerName})`, 'ME', true);
+  }, 2200);
+}
+
+function drawCard(type) {
+  const pool = PACK_POOLS[type];
+  const picked = pool[Math.floor(Math.random() * pool.length)];
+  const tier = PREVIEW_TIER_TO_CARD_TIER[picked.previewTier] || 'Gold';
+  return {
+    id:++cardId,
+    playerName:picked.n,
+    pos:picked.pos,
+    tier,
+    value:picked.v,
+    currentValue:picked.v,
+    originalValue:picked.v,
+    condition:picked.cond,
+    upgradedValue:picked.up,
+    packType:type,
+    packPrice:PACK_DATA[type].price,
+    status:'active',
+    timeLeft:'Season End · 87 days',
+    artSrc:getPlayerCardArt(picked.n)
+  };
+}
+
+function populateReveal(card) {
+  const tv = TIER_VIS[card.tier];
+  const plc = document.getElementById('pl-card');
+  plc.className = 'plcard ' + tv.cardCls;
+  document.getElementById('pl-art-img').src = card.artSrc || getPlayerCardArt(card.playerName);
+  document.getElementById('pl-art-img').alt = `${card.playerName} card art`;
+  document.getElementById('pl-num').textContent = card.value;
+  document.getElementById('pl-num').style.color = tv.valColor;
+  document.getElementById('pl-cond-s').textContent = card.condition.split('.')[0];
+  document.getElementById('pl-up-s').textContent = `→ ${card.upgradedValue} NGN if triggered`;
+  document.getElementById('rp-player').textContent = card.playerName;
+  document.getElementById('rp-val').textContent = card.value + ' NGN';
+  document.getElementById('rp-vs').textContent = `Pack cost: ${card.packPrice} NGN · ${card.value >= card.packPrice ? '✅ Above' : '📉 Below'} cost`;
+  document.getElementById('rp-up').textContent = card.upgradedValue + ' NGN';
+  document.getElementById('rp-up-s').textContent = `+${card.upgradedValue - card.value} NGN over instant value`;
+  document.getElementById('rp-cond').textContent = card.condition;
+  document.getElementById('dz-sv').textContent = card.value + ' NGN';
+  document.getElementById('dz-hv').textContent = card.upgradedValue + ' NGN';
+}
+
+function sellCard() {
+  if (!currentCard) return;
+  balance += currentCard.value;
+  updateBalance();
+  showToast(`Sold for ${currentCard.value} NGN`, 't-blue');
+  addActEntry(`sold <span class="af-pk">${currentCard.playerName}</span> for <span class="af-l">${currentCard.value} NGN</span>`, 'ME');
+  closeOpenModal();
+}
+
+function holdCard() {
+  if (!currentCard) return;
+  myCards.push(currentCard);
+  updateCardsCount();
+  showToast('Card added to collection', 't-green');
+  addActEntry(`is holding <span class="af-pk">${currentCard.playerName}</span> — upside <span class="af-w">${currentCard.upgradedValue} NGN</span>`, 'ME');
+  closeOpenModal();
+}
+
+function closeOpenModal() {
+  document.getElementById('open-modal').classList.remove('on');
+  revealReady = false; currentCard = null;
+}
+
+// ══════════════════════════════════════════════════
+// MY CARDS
+// ══════════════════════════════════════════════════
+setInterval(() => {
+  myCards.forEach(c => {
+    if (c.status !== 'active') return;
+    c.currentValue = Math.max(1, parseFloat((c.currentValue - (Math.random()*1.5+0.4)).toFixed(1)));
+  });
+  if (document.getElementById('pg-cards').classList.contains('on')) renderCards();
+}, 5000);
+
+function renderCards() {
+  const grid = document.getElementById('mcg');
+  const empty = document.getElementById('empty-c');
+  if (myCards.length === 0) { empty.classList.add('on'); grid.innerHTML = ''; return; }
+  empty.classList.remove('on');
+  const tv = TIER_VIS;
+  grid.innerHTML = myCards.map(c => {
+    const t = tv[c.tier];
+    const delta = parseFloat((c.currentValue - c.originalValue).toFixed(1));
+    const dcls = delta >= 0 ? 'mc-delta-u' : 'mc-delta-d';
+    const dsign = delta >= 0 ? '+' : '';
+    return `
+    <div class="mc">
+      <div class="mc-art">
+        <img src="${c.artSrc || getPlayerCardArt(c.playerName)}" alt="${c.playerName} card art">
+      </div>
+      <div class="mc-hd">
+        <div class="mc-name">${c.playerName}</div>
+        <span class="pk-tier ${c.tier==='Silver'?'t-s':c.tier==='Gold'?'t-p':'t-e'}">${c.tier}</span>
+      </div>
+      <div class="mc-body">
+        <div class="mc-vrow">
+          <div class="mc-cv" style="color:${t.valColor}">${c.currentValue.toFixed(1)} NGN</div>
+          ${delta !== 0 ? `<span class="mc-delta ${dcls}">${dsign}${delta}</span>` : ''}
+          <div class="mc-ov">${c.originalValue} NGN</div>
+        </div>
+        <div class="mc-cond">${c.condition}</div>
+        <div class="mc-up">↑ ${c.upgradedValue} NGN if triggered</div>
+        <div class="mc-meta">
+          <div class="mc-status s-active"><span class="s-dot"></span>Active</div>
+          <div class="mc-timer">${c.timeLeft}</div>
+        </div>
+        <div class="mc-acts">
+          <button class="mc-sell" onclick="sellFromCollection(${c.id})">Sell · ${c.currentValue.toFixed(1)} NGN</button>
+          <div class="mc-hold-tag">Holding</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function sellFromCollection(id) {
+  const idx = myCards.findIndex(c => c.id === id);
+  if (idx === -1) return;
+  const c = myCards[idx];
+  balance += parseFloat(c.currentValue);
+  updateBalance();
+  showToast(`Sold ${c.playerName} for ${c.currentValue.toFixed(1)} NGN`, 't-blue');
+  addActEntry(`sold <span class="af-pk">${c.playerName}</span> from collection for <span class="af-l">${c.currentValue.toFixed(1)} NGN</span>`, 'ME');
+  myCards.splice(idx, 1);
+  updateCardsCount();
+  renderCards();
+}
+
+// ══════════════════════════════════════════════════
+// ACTIVITY
+// ══════════════════════════════════════════════════
+const FAKE_USERS = ['CardKing_NG','Dragan_K','SportsFan99','ProfitHunter','AdeKola88','Ngozi_X','TalentPicker','BullsEye7','GoldHunter','User382'];
+function genFake() {
+  const u = FAKE_USERS[Math.floor(Math.random()*FAKE_USERS.length)];
+  const packs = ['starter','pro','elite'];
+  const ptype = packs[Math.floor(Math.random()*packs.length)];
+  const pd = PACK_DATA[ptype];
+  const r = Math.random();
+  let text;
+  if (r < 0.08) text = `<span class="af-u">${u}</span> hit JACKPOT on <span class="af-pk">${pd.label}</span> — <span class="af-j">${pd.jackpot.value.toLocaleString()} NGN</span>`;
+  else if (r < 0.35) {
+    const v = Math.floor(pd.stats.high.replace(/[^0-9]/g,'') * 0.3 + Math.random() * pd.stats.high.replace(/[^0-9]/g,'') * 0.3);
+    text = `<span class="af-u">${u}</span> opened <span class="af-pk">${pd.label}</span> → <span class="af-w">${v} NGN</span>`;
+  } else {
+    const v = Math.floor(pd.price * (0.4 + Math.random() * 0.5));
+    text = `<span class="af-u">${u}</span> opened <span class="af-pk">${pd.label}</span> → <span class="af-l">${v} NGN</span>`;
+  }
+  return { text, time:new Date(), initials:u.slice(0,2).toUpperCase(), isMe:false };
+}
+
+function addActEntry(text, initials, isMe=false) {
+  actLog.unshift({ text, time:new Date(), initials, isMe });
+  if (actLog.length > 60) actLog.pop();
+}
+
+function renderActivity() {
+  const feed = document.getElementById('af');
+  feed.innerHTML = actLog.slice(0,30).map((item,i) => `
+    <div class="af-item${i===0?' new':''}">
+      <div class="af-av" style="${item.isMe?'border-color:var(--blue);color:var(--blue)':''}">${item.initials}</div>
+      <div class="af-txt">${item.text}</div>
+      <div class="af-t">${timeAgo(item.time)}</div>
+    </div>`).join('');
+  renderLb();
+}
+
+function timeAgo(d) {
+  const s = Math.floor((new Date()-d)/1000);
+  if (s < 60) return s+'s ago';
+  if (s < 3600) return Math.floor(s/60)+'m ago';
+  return Math.floor(s/3600)+'h ago';
+}
+
+function renderLb() {
+  const rows = [
+    {u:'CardKing_NG',p:1843,c:18,top:true},{u:'GoldHunter',p:1021,c:12,top:true},{u:'AdeKola88',p:647,c:15,top:true},
+    {u:'ProfitHunter',p:218,c:7,top:false},{u:'BullsEye7',p:84,c:5,top:false},
+    {u:'TalentPicker',p:-120,c:8,top:false},{u:'Ngozi_X',p:-255,c:11,top:false},
+  ];
+  document.getElementById('lb-body').innerHTML = rows.map((r,i) => `
+    <tr class="lb-row">
+      <td class="lb-rank ${r.top?'g':''}">${i+1}</td>
+      <td><div class="lb-user-cell"><div class="af-av" style="width:28px;height:28px;font-size:.68rem">${r.u.slice(0,2).toUpperCase()}</div>${r.u}</div></td>
+      <td class="lb-profit ${r.p>=0?'pos':'neg'}">${r.p>=0?'+':''}${r.p} NGN</td>
+      <td class="lb-cards">${r.c}</td>
+    </tr>`).join('');
+}
+
+// ══════════════════════════════════════════════════
+// TICKER
+// ══════════════════════════════════════════════════
+function buildTicker() {
+  const items = [
+    `<span class="tk-u">CardKing_NG</span> hit JACKPOT Elite Pack → <span class="tk-j">3,000 NGN</span>`,
+    `<span class="tk-u">AdeKola88</span> opened Pro Pack → <span class="tk-w">148 NGN</span> card`,
+    `<span class="tk-u">GoldHunter</span> sold Kylian Ferreira card for <span class="tk-w">310 NGN</span>`,
+    `<span class="tk-u">BullsEye7</span> opened Starter Pack → <span class="tk-l">7 NGN</span>`,
+    `<span class="tk-u">ProfitHunter</span> holding Neymar da Costa — upside <span class="tk-w">1,000 NGN</span>`,
+    `<span class="tk-u">Ngozi_X</span> opened Elite Pack → <span class="tk-w">240 NGN</span> card`,
+    `<span class="tk-u">SportsFan99</span> opened Pro Pack → <span class="tk-l">38 NGN</span>`,
+    `<span class="tk-u">TalentPicker</span> sold Bruno Castillo for <span class="tk-w">95 NGN</span>`,
+    `<span class="tk-u">Dragan_K</span> hit JACKPOT Elite Pack → <span class="tk-j">2,800 NGN</span>`,
+    `<span class="tk-u">User382</span> opened Starter Pack → <span class="tk-l">5 NGN</span>`,
+  ];
+  const doubled = [...items,...items];
+  document.getElementById('tk-track').innerHTML = doubled.map(t => `<div class="tk-item">${t}</div>`).join('');
+}
+
+// ══════════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════════
+function updateBalance() {
+  document.getElementById('nav-bal').textContent = balance.toFixed(0) + ' NGN';
+}
+
+function updateCardsCount() {
+  const n = myCards.length;
+  const cnt = document.getElementById('nav-cnt');
+  cnt.textContent = n; cnt.style.display = n > 0 ? 'flex' : 'none';
+  document.getElementById('cards-badge').textContent = n + (n===1?' Card':' Cards');
+  renderCards();
+}
+
+function showToast(msg, cls) {
+  const box = document.getElementById('toast-box');
+  const t = document.createElement('div');
+  t.className = 'toast ' + cls; t.textContent = msg;
+  box.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('on'));
+  setTimeout(() => { t.classList.remove('on'); setTimeout(() => t.remove(), 280); }, 2700);
+}
+
+// ══════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════
+buildTicker();
+for (let i = 0; i < 24; i++) {
+  const item = genFake();
+  item.time = new Date(Date.now() - Math.random() * 3600000);
+  actLog.push(item);
+}
+actLog.sort((a,b) => b.time - a.time);
+updateBalance();
+updatePackStockUI();
+updateCardsCount();
+
+// auto activity
+(function sched() {
+  setTimeout(() => {
+    actLog.unshift(genFake());
+    if (actLog.length > 60) actLog.pop();
+    if (document.getElementById('pg-activity').classList.contains('on')) renderActivity();
+    sched();
+  }, 8000 + Math.random() * 9000);
+})();
+</script>
+</body>
+</html>
